@@ -13,18 +13,6 @@ function love.load()
     -- fieldStrings = {
     --     "###############",
     --     "#             #",
-    --     "#             #",
-    --     "#    #        #",
-    --     "#             #",
-    --     "#   2         #",
-    --     "#   11     #  #",
-    --     "#2# ####  #####",
-    --     "######## ######",
-    --     "###############",
-    -- }
-    -- fieldStrings = {
-    --     "###############",
-    --     "#             #",
     --     "#    3        #",
     --     "#    #        #",
     --     "#             #",
@@ -34,17 +22,46 @@ function love.load()
     --     "######## ######",
     --     "###############",
     -- }
+    -- fieldStrings = {
+    --     "#################",
+    --     "#               #",
+    --     "#    3          #",
+    --     "#    #          #",
+    --     "#               #",
+    --     "#           2   #",
+    --     "#          331  #",
+    --     "####   ### ######",
+    --     "#####12##########",
+    --     "#################",
+    -- }
+    -- fieldStrings = {
+    --     "##############",
+    --     "#            #",
+    --     "#            #",
+    --     "#      1     #",
+    --     "#      ##    #",
+    --     "#  2     1 3 #",
+    --     "##3###2 ######",
+    --     "##############",
+    -- }
+    -- fieldStrings = {
+    --     "##############",
+    --     "#            #",
+    --     "#            #",
+    --     "#12  22      #",
+    --     "### #### ##  #",
+    --     "#12          #",
+    --     "#####  ##   ##",
+    --     "###### ##  ###",
+    --     "##############",
+    -- }
     fieldStrings = {
-        "#################",
-        "#               #",
-        "#    3          #",
-        "#    #          #",
-        "#               #",
-        "#           2   #",
-        "#          331  #",
-        "####   ### ######",
-        "#####12##########",
-        "#################",
+        "######",
+        "# 21 #",
+        "# 13 #",
+        "# 21 #",
+        "# 32 #",
+        "######",
     }
 
     -- convert to table
@@ -233,25 +250,30 @@ function processStep(field, objects, moveId, dir)
     field, objects[moveId] = moveObject(field, objects[moveId], dir, 0)
 
     -- gravity
-    for i, object in ipairs(objects) do
-        repeat
-            local fell = false
-            local floating = true
 
-            for _, square in ipairs(objects[i]) do
-                if field[square.x][square.y+1] ~= " " then
-                    floating = false
-                    break
+    repeat
+        local fellAny = false
+        for i, object in ipairs(objects) do
+            repeat
+                local fell = false
+                local floating = true
+
+                for _, square in ipairs(objects[i]) do
+                    if field[square.x][square.y+1] ~= " " then
+                        floating = false
+                        break
+                    end
                 end
-            end
 
-            if floating then
-                field, objects[i] = moveObject(field, objects[i], 0, 1)
+                if floating then
+                    field, objects[i] = moveObject(field, objects[i], 0, 1)
 
-                fell = true
-            end
-        until fell == false
-    end
+                    fell = true
+                    fellAny = true
+                end
+            until fell == false
+        end
+    until fellAny == false
 
     return field
 end
